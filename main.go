@@ -1,16 +1,14 @@
 package main
 
 import (
+	"github.com/alistairfink/2D-Game-Fun/constants"
+	"github.com/alistairfink/2D-Game-Fun/entities"
+	"github.com/alistairfink/2D-Game-Fun/resources"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-	"image"
-	_ "image/png"
-	"os"
 	"time"
 )
-
-const GAME_TITLE = "2D Game"
 
 func main() {
 	pixelgl.Run(run)
@@ -18,7 +16,7 @@ func main() {
 
 func run() {
 	config := pixelgl.WindowConfig{
-		Title:  GAME_TITLE,
+		Title:  constants.GameTitle,
 		Bounds: pixel.R(0, 0, 1024, 768),
 		VSync:  true,
 	}
@@ -28,45 +26,18 @@ func run() {
 		panic(err.Error())
 	}
 
-	hussein, err := loadImage("./resources/Hussein.png")
-	if err != nil {
-		panic(err.Error())
-	}
+	resourceLoader := resources.NewResourceLoader()
+	husseinEntity := entities.NewHussein(&resourceLoader, win)
 
-	husseinSprite := pixel.NewSprite(hussein, hussein.Bounds())
-
-	angle := 0.0
-
-	last := time.Now()
+	lastFrameTime := time.Now()
 	for !win.Closed() {
 		win.Clear(colornames.Firebrick)
 
-		deltaTime := time.Since(last).Seconds()
-		last = time.Now()
-		angle += 1.5 * deltaTime
+		deltaTime := time.Since(lastFrameTime).Seconds()
+		lastFrameTime = time.Now()
 
-		husseinMatrix := pixel.IM
-		husseinMatrix = husseinMatrix.Moved(win.Bounds().Center())
-		husseinMatrix = husseinMatrix.ScaledXY(win.Bounds().Center(), pixel.V(0.15, 0.15))
-		husseinMatrix = husseinMatrix.Rotated(win.Bounds().Center(), angle)
-		husseinSprite.Draw(win, husseinMatrix)
+		husseinEntity.Draw(deltaTime)
 
 		win.Update()
-
 	}
-}
-
-func loadImage(filePath string) (pixel.Picture, error) {
-	file, err := os.Open(filePath)
-	defer file.Close()
-	if err != nil {
-		return nil, err
-	}
-
-	img, _, err := image.Decode(file)
-	if err != nil {
-		return nil, err
-	}
-
-	return pixel.PictureDataFromImage(img), nil
 }
