@@ -3,9 +3,11 @@ package main
 import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
+	"golang.org/x/image/colornames"
 	"image"
 	_ "image/png"
 	"os"
+	"time"
 )
 
 const GAME_TITLE = "2D Game"
@@ -32,10 +34,25 @@ func run() {
 	}
 
 	husseinSprite := pixel.NewSprite(hussein, hussein.Bounds())
-	husseinSprite.Draw(win, pixel.IM.Moved((win.Bounds().Center())))
 
+	angle := 0.0
+
+	last := time.Now()
 	for !win.Closed() {
+		win.Clear(colornames.Firebrick)
+
+		deltaTime := time.Since(last).Seconds()
+		last = time.Now()
+		angle += 1.5 * deltaTime
+
+		husseinMatrix := pixel.IM
+		husseinMatrix = husseinMatrix.Moved(win.Bounds().Center())
+		husseinMatrix = husseinMatrix.ScaledXY(win.Bounds().Center(), pixel.V(0.15, 0.15))
+		husseinMatrix = husseinMatrix.Rotated(win.Bounds().Center(), angle)
+		husseinSprite.Draw(win, husseinMatrix)
+
 		win.Update()
+
 	}
 }
 
