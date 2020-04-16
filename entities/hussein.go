@@ -1,7 +1,7 @@
 package entities
 
 import (
-	"github.com/alistairfink/2D-Game-Fun/resources"
+	"github.com/alistairfink/Hussein-Attack/resources"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 )

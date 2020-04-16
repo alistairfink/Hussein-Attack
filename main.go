@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/alistairfink/2D-Game-Fun/constants"
-	"github.com/alistairfink/2D-Game-Fun/entities"
-	"github.com/alistairfink/2D-Game-Fun/resources"
-	"github.com/alistairfink/2D-Game-Fun/state"
+	"github.com/alistairfink/Hussein-Attack/constants"
+	"github.com/alistairfink/Hussein-Attack/entities"
+	"github.com/alistairfink/Hussein-Attack/resources"
+	"github.com/alistairfink/Hussein-Attack/state"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
