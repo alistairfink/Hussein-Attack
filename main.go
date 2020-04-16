@@ -8,6 +8,7 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
+	"math/rand"
 	"time"
 )
 
@@ -30,11 +31,26 @@ func run() {
 	// Startup
 	resourceLoader := resources.NewResourceLoader()
 	stateMachine := state.NewStateMachine()
+	rand.Seed(time.Now().UnixNano())
 
 	// Entities
 	husseinEntity := entities.NewHussein(&resourceLoader, win)
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
-	tp := entities.NewToiletPaper(&resourceLoader, win, 0.0)
+	tp1 := entities.NewToiletPaper(&resourceLoader, win)
+	tp2 := entities.NewToiletPaper(&resourceLoader, win)
+	tp3 := entities.NewToiletPaper(&resourceLoader, win)
+	tp4 := entities.NewToiletPaper(&resourceLoader, win)
+	tp5 := entities.NewToiletPaper(&resourceLoader, win)
+	tp6 := entities.NewToiletPaper(&resourceLoader, win)
+	tp7 := entities.NewToiletPaper(&resourceLoader, win)
+	tp8 := entities.NewToiletPaper(&resourceLoader, win)
+	tp9 := entities.NewToiletPaper(&resourceLoader, win)
+	tp10 := entities.NewToiletPaper(&resourceLoader, win)
+	tp11 := entities.NewToiletPaper(&resourceLoader, win)
+	tp12 := entities.NewToiletPaper(&resourceLoader, win)
+	tp13 := entities.NewToiletPaper(&resourceLoader, win)
+	tp14 := entities.NewToiletPaper(&resourceLoader, win)
+	tp15 := entities.NewToiletPaper(&resourceLoader, win)
 
 	lastFrameTime := time.Now()
 	for !win.Closed() {
@@ -50,7 +66,22 @@ func run() {
 				stateMachine.UpdateStateGameplay()
 			}
 		} else if stateMachine.IsGamePlay() {
-			tp.Draw()
+			tp1.Draw()
+			tp2.Draw()
+			tp3.Draw()
+			tp4.Draw()
+			tp5.Draw()
+			tp6.Draw()
+			tp7.Draw()
+			tp8.Draw()
+			tp9.Draw()
+			tp10.Draw()
+			tp11.Draw()
+			tp12.Draw()
+			tp13.Draw()
+			tp14.Draw()
+			tp15.Draw()
+
 			if win.Pressed(pixelgl.KeyLeft) {
 				husseinEntity.RotateLeft(deltaTime)
 			} else if win.Pressed(pixelgl.KeyRight) {
