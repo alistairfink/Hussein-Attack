@@ -18,7 +18,7 @@ func main() {
 func run() {
 	config := pixelgl.WindowConfig{
 		Title:  constants.GameTitle,
-		Bounds: pixel.R(0, 0, 1024, 768),
+		Bounds: pixel.R(0, 0, constants.GameWidth, constants.GameHeight),
 		VSync:  true,
 	}
 

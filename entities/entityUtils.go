@@ -1,7 +1,7 @@
 package entities
 
 import (
-	"github.com/faiface/pixel"
+// "github.com/faiface/pixel"
 )
 
 // func generateEdgeSpawn() pixel.V {
