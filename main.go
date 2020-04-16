@@ -36,21 +36,23 @@ func run() {
 	// Entities
 	husseinEntity := entities.NewHussein(&resourceLoader, win)
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
-	tp1 := entities.NewToiletPaper(&resourceLoader, win)
-	tp2 := entities.NewToiletPaper(&resourceLoader, win)
-	tp3 := entities.NewToiletPaper(&resourceLoader, win)
-	tp4 := entities.NewToiletPaper(&resourceLoader, win)
-	tp5 := entities.NewToiletPaper(&resourceLoader, win)
-	tp6 := entities.NewToiletPaper(&resourceLoader, win)
-	tp7 := entities.NewToiletPaper(&resourceLoader, win)
-	tp8 := entities.NewToiletPaper(&resourceLoader, win)
-	tp9 := entities.NewToiletPaper(&resourceLoader, win)
-	tp10 := entities.NewToiletPaper(&resourceLoader, win)
-	tp11 := entities.NewToiletPaper(&resourceLoader, win)
-	tp12 := entities.NewToiletPaper(&resourceLoader, win)
-	tp13 := entities.NewToiletPaper(&resourceLoader, win)
-	tp14 := entities.NewToiletPaper(&resourceLoader, win)
-	tp15 := entities.NewToiletPaper(&resourceLoader, win)
+	toiletPaperEntities := []entities.ToiletPaper{
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+		entities.NewToiletPaper(&resourceLoader, win),
+	}
 
 	lastFrameTime := time.Now()
 	for !win.Closed() {
@@ -66,21 +68,13 @@ func run() {
 				stateMachine.UpdateStateGameplay()
 			}
 		} else if stateMachine.IsGamePlay() {
-			tp1.Draw()
-			tp2.Draw()
-			tp3.Draw()
-			tp4.Draw()
-			tp5.Draw()
-			tp6.Draw()
-			tp7.Draw()
-			tp8.Draw()
-			tp9.Draw()
-			tp10.Draw()
-			tp11.Draw()
-			tp12.Draw()
-			tp13.Draw()
-			tp14.Draw()
-			tp15.Draw()
+			for i := 0; i < len(toiletPaperEntities); i++ {
+				if toiletPaperEntities[i].Draw() {
+					toiletPaperEntities[i], toiletPaperEntities[len(toiletPaperEntities)-1] = toiletPaperEntities[len(toiletPaperEntities)-1], toiletPaperEntities[i]
+					toiletPaperEntities = toiletPaperEntities[:len(toiletPaperEntities)-1]
+					i--
+				}
+			}
 
 			if win.Pressed(pixelgl.KeyLeft) {
 				husseinEntity.RotateLeft(deltaTime)
