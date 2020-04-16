@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"github.com/alistairfink/Hussein-Attack/constants"
 	"github.com/alistairfink/Hussein-Attack/resources"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
@@ -14,6 +15,7 @@ type hussein struct {
 	rotateSpeed    float64
 	lasers         []laser
 	resourceLoader *resources.ResourceLoader
+	laserCooldown  int
 }
 
 func NewHussein(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) hussein {
@@ -25,6 +27,7 @@ func NewHussein(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) h
 	obj.rotateSpeed = 4
 	obj.lasers = []laser{}
 	obj.resourceLoader = resourceLoader
+	obj.laserCooldown = constants.LaserCooldown
 
 	return obj
 }
@@ -48,7 +51,10 @@ func (this *hussein) RotateRight(deltaTime float64) {
 }
 
 func (this *hussein) ShootLaser() {
-	this.lasers = append(this.lasers, NewLaser(this.resourceLoader, this.win, this.angle))
+	if this.laserCooldown <= 0 {
+		this.lasers = append(this.lasers, NewLaser(this.resourceLoader, this.win, this.angle))
+		this.laserCooldown = constants.LaserCooldown
+	}
 }
 
 func (this *hussein) DrawLasers( /*Accepts some list of objects to check lasers against*/ ) {
@@ -60,6 +66,10 @@ func (this *hussein) DrawLasers( /*Accepts some list of objects to check lasers 
 		} else {
 			// Call checkCollisions for each laser
 		}
+	}
+
+	if this.laserCooldown > 0 {
+		this.laserCooldown--
 	}
 }
 func (this *hussein) checkCollisions( /*Accepts some list of objects to check lasers against*/ ) {

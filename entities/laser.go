@@ -23,7 +23,7 @@ func NewLaser(resourceLoader *resources.ResourceLoader, win *pixelgl.Window, ang
 	obj.image = (*resourceLoader).LoadLaser()
 	obj.sprite = pixel.NewSprite(obj.image, obj.image.Bounds())
 	obj.win = win
-	obj.speed = 3
+	obj.speed = 5.0
 
 	return obj
 }
