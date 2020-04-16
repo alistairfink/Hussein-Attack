@@ -4,6 +4,7 @@ import (
 	"github.com/alistairfink/2D-Game-Fun/constants"
 	"github.com/alistairfink/2D-Game-Fun/entities"
 	"github.com/alistairfink/2D-Game-Fun/resources"
+	"github.com/alistairfink/2D-Game-Fun/state"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
@@ -26,8 +27,13 @@ func run() {
 		panic(err.Error())
 	}
 
+	// Startup
 	resourceLoader := resources.NewResourceLoader()
+	stateMachine := state.NewStateMachine()
+
+	// Entities
 	husseinEntity := entities.NewHussein(&resourceLoader, win)
+	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
 
 	lastFrameTime := time.Now()
 	for !win.Closed() {
@@ -36,12 +42,22 @@ func run() {
 		deltaTime := time.Since(lastFrameTime).Seconds()
 		lastFrameTime = time.Now()
 
-		if win.Pressed(pixelgl.KeyLeft) {
-			husseinEntity.RotateLeft(deltaTime)
-		} else if win.Pressed(pixelgl.KeyRight) {
-			husseinEntity.RotateRight(deltaTime)
+		if stateMachine.IsMainMenu() {
+			mainMenuEntity.Draw()
+
+			if win.Pressed(pixelgl.KeySpace) {
+				stateMachine.UpdateStateGameplay()
+			}
+		} else if stateMachine.IsGamePlay() {
+			if win.Pressed(pixelgl.KeyLeft) {
+				husseinEntity.RotateLeft(deltaTime)
+			} else if win.Pressed(pixelgl.KeyRight) {
+				husseinEntity.RotateRight(deltaTime)
+			} else {
+				husseinEntity.Draw()
+			}
 		} else {
-			husseinEntity.Draw()
+			panic("Error. Closing " + constants.GameTitle + ".")
 		}
 
 		win.Update()

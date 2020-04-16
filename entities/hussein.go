@@ -6,7 +6,7 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
-type Hussein struct {
+type hussein struct {
 	angle       float64
 	image       pixel.Picture
 	sprite      *pixel.Sprite
@@ -14,8 +14,8 @@ type Hussein struct {
 	rotateSpeed float64
 }
 
-func NewHussein(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) Hussein {
-	obj := Hussein{}
+func NewHussein(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) hussein {
+	obj := hussein{}
 	obj.angle = 0.0
 	obj.image = (*resourceLoader).LoadHussein()
 	obj.sprite = pixel.NewSprite(obj.image, obj.image.Bounds())
@@ -24,7 +24,7 @@ func NewHussein(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) H
 	return obj
 }
 
-func (this *Hussein) Draw() {
+func (this *hussein) Draw() {
 	matrix := pixel.IM
 	matrix = matrix.Moved(this.win.Bounds().Center())
 	matrix = matrix.ScaledXY(this.win.Bounds().Center(), pixel.V(0.15, 0.15))
@@ -32,12 +32,12 @@ func (this *Hussein) Draw() {
 	this.sprite.Draw(this.win, matrix)
 }
 
-func (this *Hussein) RotateLeft(deltaTime float64) {
+func (this *hussein) RotateLeft(deltaTime float64) {
 	this.angle += deltaTime * this.rotateSpeed
 	this.Draw()
 }
 
-func (this *Hussein) RotateRight(deltaTime float64) {
+func (this *hussein) RotateRight(deltaTime float64) {
 	this.angle -= deltaTime * this.rotateSpeed
 	this.Draw()
 }

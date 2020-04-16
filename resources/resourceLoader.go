@@ -1,7 +1,6 @@
 package resources
 
 import (
-	"github.com/alistairfink/2D-Game-Fun/constants"
 	"github.com/faiface/pixel"
 	"image"
 	_ "image/png"
@@ -31,7 +30,7 @@ func (this *ResourceLoader) loadImage(filePath string) (pixel.Picture, error) {
 }
 
 func (this *ResourceLoader) LoadHussein() pixel.Picture {
-	husseinImageData, err := this.loadImage(constants.HusseinImageName)
+	husseinImageData, err := this.loadImage(HusseinImageName)
 	if err != nil {
 		panic(err.Error())
 	}
