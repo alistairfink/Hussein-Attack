@@ -14,35 +14,29 @@ func NewResourceLoader() ResourceLoader {
 	return obj
 }
 
-func (this *ResourceLoader) loadImage(filePath string) (pixel.Picture, error) {
+func (this *ResourceLoader) loadImage(filePath string) pixel.Picture {
 	file, err := os.Open(filePath)
 	defer file.Close()
 	if err != nil {
-		return nil, err
+		panic(err.Error())
 	}
 
 	img, _, err := image.Decode(file)
 	if err != nil {
-		return nil, err
+		panic(err.Error())
 	}
 
-	return pixel.PictureDataFromImage(img), nil
+	return pixel.PictureDataFromImage(img)
 }
 
 func (this *ResourceLoader) LoadHussein() pixel.Picture {
-	husseinImageData, err := this.loadImage(husseinImageName)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	return husseinImageData
+	return this.loadImage(husseinImageName)
 }
 
 func (this *ResourceLoader) LoadLaser() pixel.Picture {
-	laserImageData, err := this.loadImage(laserImageName)
-	if err != nil {
-		panic(err.Error())
-	}
+	return this.loadImage(laserImageName)
+}
 
-	return laserImageData
+func (this *ResourceLoader) LoadToiletPaper() pixel.Picture {
+	return this.loadImage(toiletPaperImageName)
 }

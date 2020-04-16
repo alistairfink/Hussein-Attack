@@ -34,6 +34,7 @@ func run() {
 	// Entities
 	husseinEntity := entities.NewHussein(&resourceLoader, win)
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
+	tp := entities.NewToiletPaper(&resourceLoader, win, 0.0)
 
 	lastFrameTime := time.Now()
 	for !win.Closed() {
@@ -49,6 +50,7 @@ func run() {
 				stateMachine.UpdateStateGameplay()
 			}
 		} else if stateMachine.IsGamePlay() {
+			tp.Draw()
 			if win.Pressed(pixelgl.KeyLeft) {
 				husseinEntity.RotateLeft(deltaTime)
 			} else if win.Pressed(pixelgl.KeyRight) {
