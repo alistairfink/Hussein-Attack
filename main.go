@@ -36,7 +36,13 @@ func run() {
 		deltaTime := time.Since(lastFrameTime).Seconds()
 		lastFrameTime = time.Now()
 
-		husseinEntity.Draw(deltaTime)
+		if win.Pressed(pixelgl.KeyLeft) {
+			husseinEntity.RotateLeft(deltaTime)
+		} else if win.Pressed(pixelgl.KeyRight) {
+			husseinEntity.RotateRight(deltaTime)
+		} else {
+			husseinEntity.Draw()
+		}
 
 		win.Update()
 	}
