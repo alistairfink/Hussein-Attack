@@ -37,7 +37,7 @@ func run() {
 
 	lastFrameTime := time.Now()
 	for !win.Closed() {
-		win.Clear(colornames.Firebrick)
+		win.Clear(colornames.Black)
 
 		deltaTime := time.Since(lastFrameTime).Seconds()
 		lastFrameTime = time.Now()
@@ -56,6 +56,12 @@ func run() {
 			} else {
 				husseinEntity.Draw()
 			}
+
+			if win.Pressed(pixelgl.KeySpace) {
+				husseinEntity.ShootLaser()
+			}
+
+			husseinEntity.DrawLasers()
 		} else {
 			panic("Error. Closing " + constants.GameTitle + ".")
 		}

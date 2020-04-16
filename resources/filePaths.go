@@ -1,3 +1,4 @@
 package resources
 
-const HusseinImageName = "./resources/Hussein.png"
+const husseinImageName = "./resources/Hussein.png"
+const laserImageName = "./resources/Laser.png"
