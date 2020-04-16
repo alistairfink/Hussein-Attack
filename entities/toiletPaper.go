@@ -8,15 +8,16 @@ import (
 )
 
 type toiletPaper struct {
-	angle     float64
-	image     pixel.Picture
-	sprite    *pixel.Sprite
-	win       *pixelgl.Window
-	speed     float64
-	posX      float64
-	posY      float64
-	unitStepX float64
-	unitStepY float64
+	image          pixel.Picture
+	sprite         *pixel.Sprite
+	win            *pixelgl.Window
+	speed          float64
+	posX           float64
+	posY           float64
+	unitStepX      float64
+	unitStepY      float64
+	angle          float64
+	angleIncrement float64
 }
 
 func NewToiletPaper(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) toiletPaper {
@@ -24,24 +25,29 @@ func NewToiletPaper(resourceLoader *resources.ResourceLoader, win *pixelgl.Windo
 	obj.image = (*resourceLoader).LoadToiletPaper()
 	obj.sprite = pixel.NewSprite(obj.image, obj.image.Bounds())
 	obj.win = win
+
+	// Positional Movement
 	max, min := 6.0, 1.0
 	obj.speed = min + rand.Float64()*(max-min)
 	obj.posX, obj.posY = generateEdgeSpawn(win)
-	obj.angle = 0.0
 	obj.unitStepX, obj.unitStepY = calculateUnitSteps(pixel.V(obj.posX, obj.posY), win.Bounds().Center())
+
+	//  Rotation
+	max, min = 0.1, 0.0
+	obj.angle = 0.0
+	obj.angleIncrement = min + rand.Float64()*(max-min)
 
 	return obj
 }
 
 func (this *toiletPaper) Draw() {
-	this.angle += 0.05
+	this.angle += this.angleIncrement
 	this.posX += this.unitStepX * this.speed
 	this.posY += this.unitStepY * this.speed
 
 	matrix := pixel.IM
-	// matrix = matrix.ScaledXY(pixel.V(this.posX, this.posY), pixel.V(0.4, 0.4))
+	matrix = matrix.Rotated(pixel.V(0.0, 0.0), this.angle)
 	matrix = matrix.Moved(pixel.V(this.posX, this.posY))
-	// matrix = matrix.Moved(this.win.Bounds().Center())
 
 	this.sprite.Draw(this.win, matrix)
 }
