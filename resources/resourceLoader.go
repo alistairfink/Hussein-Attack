@@ -40,3 +40,7 @@ func (this *ResourceLoader) LoadLaser() pixel.Picture {
 func (this *ResourceLoader) LoadToiletPaper() pixel.Picture {
 	return this.loadImage(toiletPaperImageName)
 }
+
+func (this *ResourceLoader) LoadVirus() pixel.Picture {
+	return this.loadImage(virusImageName)
+}
