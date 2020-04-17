@@ -11,4 +11,6 @@ const GameWidth = 1024
 const LaserCooldown = 10
 const ToiletPaperScore = 100
 const ToiletPaperSpawnRate = 170
-const InitialViruseSpawnRate = 200
+const InitialViruseSpawnRate = 350
+const VirusSpawnRateRampUp = 20
+const VirusSpawnRateMin = 50

@@ -32,21 +32,16 @@ func run() {
 	resourceLoader := resources.NewResourceLoader()
 	stateMachine := state.NewStateMachine()
 	rand.Seed(time.Now().UnixNano())
+	var counter uint64 = 0
 	viruseSpawnRate := constants.InitialViruseSpawnRate
+	println(0, viruseSpawnRate)
 
 	// Entities
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
 	scoreEntity := entities.NewScore(&resourceLoader, win)
 	husseinEntity := entities.NewHussein(&resourceLoader, win)
 	toiletPaperEntities := []entities.ToiletPaper{}
-	virusEntities := []entities.Virus{
-		entities.NewVirus(&resourceLoader, win),
-		entities.NewVirus(&resourceLoader, win),
-		entities.NewVirus(&resourceLoader, win),
-		entities.NewVirus(&resourceLoader, win),
-		entities.NewVirus(&resourceLoader, win),
-		entities.NewVirus(&resourceLoader, win),
-	}
+	virusEntities := []entities.Virus{}
 
 	lastFrameTime := time.Now()
 	for !win.Closed() {
@@ -62,6 +57,12 @@ func run() {
 				stateMachine.UpdateStateGameplay()
 			}
 		} else if stateMachine.IsGamePlay() {
+			// Virus Ramp Up
+			counter++
+			if viruseSpawnRate > constants.VirusSpawnRateMin && counter%constants.VirusSpawnRateRampUp == 0 {
+				viruseSpawnRate--
+			}
+
 			// Score
 			scoreEntity.Draw()
 
