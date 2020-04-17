@@ -55,7 +55,7 @@ func run() {
 		if stateMachine.IsMainMenu() {
 			mainMenuEntity.Draw()
 
-			if win.Pressed(pixelgl.KeySpace) {
+			if win.Pressed(pixelgl.KeyEnter) {
 				stateMachine.UpdateStateGameplay()
 			}
 		} else if stateMachine.IsGamePlay() {
@@ -151,7 +151,7 @@ func run() {
 			// Draw Game Over
 			gameOverEntity.Draw()
 
-			if win.Pressed(pixelgl.KeySpace) {
+			if win.Pressed(pixelgl.KeyEnter) {
 				gameOverEntity.Reset()
 				stateMachine.UpdateStateGameplay()
 			}
