@@ -32,12 +32,21 @@ func run() {
 	resourceLoader := resources.NewResourceLoader()
 	stateMachine := state.NewStateMachine()
 	rand.Seed(time.Now().UnixNano())
+	viruseSpawnRate := constants.InitialViruseSpawnRate
 
 	// Entities
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
 	scoreEntity := entities.NewScore(&resourceLoader, win)
 	husseinEntity := entities.NewHussein(&resourceLoader, win)
 	toiletPaperEntities := []entities.ToiletPaper{}
+	virusEntities := []entities.Virus{
+		entities.NewVirus(&resourceLoader, win),
+		entities.NewVirus(&resourceLoader, win),
+		entities.NewVirus(&resourceLoader, win),
+		entities.NewVirus(&resourceLoader, win),
+		entities.NewVirus(&resourceLoader, win),
+		entities.NewVirus(&resourceLoader, win),
+	}
 
 	lastFrameTime := time.Now()
 	for !win.Closed() {
@@ -71,6 +80,19 @@ func run() {
 				}
 			}
 
+			// Viruses
+			virusRnadomNum := rand.Intn(viruseSpawnRate)
+			if virusRnadomNum == 0 {
+				virusEntities = append(virusEntities, entities.NewVirus(&resourceLoader, win))
+			}
+
+			for i := 0; i < len(virusEntities); i++ {
+				if virusEntities[i].Draw() {
+					// Gameover
+					// Change State here
+				}
+			}
+
 			// Hussein and Lasers
 			if win.Pressed(pixelgl.KeyLeft) {
 				husseinEntity.RotateLeft(deltaTime)
@@ -84,7 +106,7 @@ func run() {
 				husseinEntity.ShootLaser()
 			}
 
-			shotToiletPaper := husseinEntity.DrawLasers(&toiletPaperEntities)
+			shotToiletPaper, shotViruses := husseinEntity.DrawLasers(&toiletPaperEntities, &virusEntities)
 			if len(shotToiletPaper) > 0 {
 				newToiletPaperEntities := make([]entities.ToiletPaper, len(toiletPaperEntities)-len(shotToiletPaper))
 				i := 0
@@ -96,6 +118,19 @@ func run() {
 				}
 
 				toiletPaperEntities = newToiletPaperEntities
+			}
+
+			if len(shotViruses) > 0 {
+				newVirusEntities := make([]entities.Virus, len(virusEntities)-len(shotViruses))
+				i := 0
+				for j := 0; j < len(virusEntities); j++ {
+					if !shotViruses[j] {
+						newVirusEntities[i] = virusEntities[j]
+						i++
+					}
+				}
+
+				virusEntities = newVirusEntities
 			}
 		} else {
 			panic("Error. Closing " + constants.GameTitle + ".")
