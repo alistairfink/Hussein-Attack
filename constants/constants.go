@@ -9,3 +9,4 @@ const GameWidth = 1024
 
 // Gameplay Constants
 const LaserCooldown = 10
+const ToiletPaperScore = 100

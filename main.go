@@ -78,7 +78,7 @@ func run() {
 					toiletPaperEntities[i], toiletPaperEntities[len(toiletPaperEntities)-1] = toiletPaperEntities[len(toiletPaperEntities)-1], toiletPaperEntities[i]
 					toiletPaperEntities = toiletPaperEntities[:len(toiletPaperEntities)-1]
 					i--
-					scoreEntity.IncrementScore(100)
+					scoreEntity.IncrementScore(constants.ToiletPaperScore)
 				}
 			}
 
