@@ -34,15 +34,16 @@ func run() {
 	rand.Seed(time.Now().UnixNano())
 	var counter uint64 = 0
 	viruseSpawnRate := constants.InitialViruseSpawnRate
+	lastFrameTime := time.Now()
 
 	// Entities
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
+	gameOverEntity := entities.NewGameOver(&resourceLoader, win)
 	scoreEntity := entities.NewScore(&resourceLoader, win)
 	husseinEntity := entities.NewHussein(&resourceLoader, win)
 	toiletPaperEntities := []entities.ToiletPaper{}
 	virusEntities := []entities.Virus{}
 
-	lastFrameTime := time.Now()
 	for !win.Closed() {
 		win.Clear(colornames.Black)
 
@@ -133,9 +134,11 @@ func run() {
 
 				virusEntities = newVirusEntities
 			}
-		} else if stateMachine.IsGameOVer() {
+		} else if stateMachine.IsGameOver() {
 			// Get Values
-			score := scoreEntity.Score()
+			if !gameOverEntity.ScoreSet() {
+				gameOverEntity.SetScore(scoreEntity.Score())
+			}
 
 			// Reset Entities
 			virusEntities = []entities.Virus{}
@@ -143,8 +146,11 @@ func run() {
 			scoreEntity.Reset()
 			husseinEntity.Reset()
 
-			_ = score
+			// Draw Game Over
+			gameOverEntity.Draw()
+
 			if win.Pressed(pixelgl.KeySpace) {
+				gameOverEntity.Reset()
 				stateMachine.UpdateStateGameplay()
 			}
 		} else {

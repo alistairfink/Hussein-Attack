@@ -21,7 +21,7 @@ func (this *StateMachine) IsGamePlay() bool {
 	return this.currState == gamePlay
 }
 
-func (this *StateMachine) IsGameOVer() bool {
+func (this *StateMachine) IsGameOver() bool {
 	return this.currState == gameOver
 }
 

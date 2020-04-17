@@ -43,17 +43,19 @@ func NewMainMenu(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) 
 	}
 
 	obj.menuTextPos = pixel.IM.Moved(win.Bounds().Center().Sub(obj.menuText.Bounds().Center()))
+	obj.menuTextPos = obj.menuTextPos.Scaled(win.Bounds().Center(), 1.4)
 
 	// Start Text
 	obj.startText = text.New(pixel.V(0, 0), obj.atlas)
 	fmt.Fprintln(obj.startText, constants.StartGameText)
 	obj.startTextPos = pixel.IM.Moved(pixel.V(win.Bounds().Center().Sub(obj.startText.Bounds().Center()).X, 200))
+	obj.startTextPos = obj.startTextPos.Scaled(win.Bounds().Center(), 1.4)
 
 	return obj
 }
 
 func (this *mainMenu) Draw() {
 	this.logoSprite.Draw(this.win, this.logoPos)
-	this.menuText.Draw(this.win, this.menuTextPos.Scaled(this.win.Bounds().Center(), 1.4))
-	this.startText.Draw(this.win, this.startTextPos.Scaled(this.win.Bounds().Center(), 1.4))
+	this.menuText.Draw(this.win, this.menuTextPos)
+	this.startText.Draw(this.win, this.startTextPos)
 }

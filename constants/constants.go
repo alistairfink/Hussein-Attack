@@ -3,6 +3,8 @@ package constants
 // Game Constants
 const GameTitle = "Hussein Attack"
 const StartGameText = "Press Space to Start Game"
+const RestartGameText = "Press Space to Restart"
+const GameOverText = "Game Over"
 const ScoreText = "Score: "
 const GameHeight = 768
 const GameWidth = 1024
