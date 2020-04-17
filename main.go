@@ -37,23 +37,7 @@ func run() {
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
 	scoreEntity := entities.NewScore(&resourceLoader, win)
 	husseinEntity := entities.NewHussein(&resourceLoader, win)
-	toiletPaperEntities := []entities.ToiletPaper{
-		entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-		// entities.NewToiletPaper(&resourceLoader, win),
-	}
+	toiletPaperEntities := []entities.ToiletPaper{}
 
 	lastFrameTime := time.Now()
 	for !win.Closed() {
@@ -73,6 +57,11 @@ func run() {
 			scoreEntity.Draw()
 
 			// Toilet Paper
+			toiletPaperRandomNum := rand.Intn(constants.ToiletPaperSpawnRate)
+			if toiletPaperRandomNum == 0 {
+				toiletPaperEntities = append(toiletPaperEntities, entities.NewToiletPaper(&resourceLoader, win))
+			}
+
 			for i := 0; i < len(toiletPaperEntities); i++ {
 				if toiletPaperEntities[i].Draw() {
 					toiletPaperEntities[i], toiletPaperEntities[len(toiletPaperEntities)-1] = toiletPaperEntities[len(toiletPaperEntities)-1], toiletPaperEntities[i]

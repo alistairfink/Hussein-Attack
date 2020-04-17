@@ -80,7 +80,7 @@ func (this *hussein) DrawLasers(toiletPaperRolls *[]ToiletPaper) map[int]bool {
 func (this *hussein) checkCollisions(toiletPaperRolls *[]ToiletPaper, toiletPaperResult map[int]bool, currLaser int) bool {
 	absPosX, absPosY := this.win.Bounds().Center().X+this.lasers[currLaser].posX, this.win.Bounds().Center().Y+this.lasers[currLaser].posY
 	for i, roll := range *toiletPaperRolls {
-		if abs(absPosX-roll.posX) < 10 && abs(absPosY-roll.posY) < 10 {
+		if abs(absPosX-roll.posX) < 25 && abs(absPosY-roll.posY) < 25 {
 			toiletPaperResult[i] = true
 			return true
 		}
