@@ -34,8 +34,9 @@ func run() {
 	rand.Seed(time.Now().UnixNano())
 
 	// Entities
-	husseinEntity := entities.NewHussein(&resourceLoader, win)
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
+	scoreEntity := entities.NewScore(&resourceLoader, win)
+	husseinEntity := entities.NewHussein(&resourceLoader, win)
 	toiletPaperEntities := []entities.ToiletPaper{
 		entities.NewToiletPaper(&resourceLoader, win),
 		entities.NewToiletPaper(&resourceLoader, win),
@@ -68,14 +69,20 @@ func run() {
 				stateMachine.UpdateStateGameplay()
 			}
 		} else if stateMachine.IsGamePlay() {
+			// Score
+			scoreEntity.Draw()
+
+			// Toilet Paper
 			for i := 0; i < len(toiletPaperEntities); i++ {
 				if toiletPaperEntities[i].Draw() {
 					toiletPaperEntities[i], toiletPaperEntities[len(toiletPaperEntities)-1] = toiletPaperEntities[len(toiletPaperEntities)-1], toiletPaperEntities[i]
 					toiletPaperEntities = toiletPaperEntities[:len(toiletPaperEntities)-1]
 					i--
+					scoreEntity.IncrementScore(100)
 				}
 			}
 
+			// Hussein and Lasers
 			if win.Pressed(pixelgl.KeyLeft) {
 				husseinEntity.RotateLeft(deltaTime)
 			} else if win.Pressed(pixelgl.KeyRight) {
