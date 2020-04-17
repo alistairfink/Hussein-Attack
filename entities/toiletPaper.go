@@ -46,7 +46,7 @@ func (this *ToiletPaper) Draw() bool {
 	this.posY += this.unitStepY * this.speed
 
 	centerX, centerY := this.win.Bounds().Center().X, this.win.Bounds().Center().Y
-	if abs(centerX-this.posX) < 10 && abs(centerY-this.posY) < 10 {
+	if abs(centerX-this.posX) < 50 && abs(centerY-this.posY) < 50 {
 		return true
 	}
 

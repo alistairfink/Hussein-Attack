@@ -57,21 +57,39 @@ func (this *hussein) ShootLaser() {
 	}
 }
 
-func (this *hussein) DrawLasers( /*Accepts some list of objects to check lasers against*/ ) {
+func (this *hussein) DrawLasers(toiletPaperRolls *[]ToiletPaper) map[int]bool {
+	toiletPaperResult := make(map[int]bool)
 	for i := 0; i < len(this.lasers); i++ {
 		if this.lasers[i].Draw() {
-			this.lasers[len(this.lasers)-1], this.lasers[i] = this.lasers[i], this.lasers[len(this.lasers)-1]
-			this.lasers = this.lasers[:len(this.lasers)-1]
+			this.removeLaser(i)
 			i--
 		} else {
-			// Call checkCollisions for each laser
+			if this.checkCollisions(toiletPaperRolls, toiletPaperResult, i) {
+				this.removeLaser(i)
+				i--
+			}
 		}
 	}
 
 	if this.laserCooldown > 0 {
 		this.laserCooldown--
 	}
-}
-func (this *hussein) checkCollisions( /*Accepts some list of objects to check lasers against*/ ) {
 
+	return toiletPaperResult
+}
+func (this *hussein) checkCollisions(toiletPaperRolls *[]ToiletPaper, toiletPaperResult map[int]bool, currLaser int) bool {
+	absPosX, absPosY := this.win.Bounds().Center().X+this.lasers[currLaser].posX, this.win.Bounds().Center().Y+this.lasers[currLaser].posY
+	for i, roll := range *toiletPaperRolls {
+		if abs(absPosX-roll.posX) < 10 && abs(absPosY-roll.posY) < 10 {
+			toiletPaperResult[i] = true
+			return true
+		}
+	}
+
+	return false
+}
+
+func (this *hussein) removeLaser(i int) {
+	this.lasers[len(this.lasers)-1], this.lasers[i] = this.lasers[i], this.lasers[len(this.lasers)-1]
+	this.lasers = this.lasers[:len(this.lasers)-1]
 }
