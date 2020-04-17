@@ -20,7 +20,7 @@ type hussein struct {
 
 func NewHussein(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) hussein {
 	obj := hussein{}
-	obj.angle = 0.0
+	obj.angle = constants.HusseinStartingAngle
 	obj.image = (*resourceLoader).LoadHussein()
 	obj.sprite = pixel.NewSprite(obj.image, obj.image.Bounds())
 	obj.win = win
@@ -110,7 +110,7 @@ func (this *hussein) removeLaser(i int) {
 }
 
 func (this *hussein) Reset() {
-	this.angle = 0.0
+	this.angle = constants.HusseinStartingAngle
 	this.lasers = []laser{}
 	this.laserCooldown = constants.LaserCooldown
 }

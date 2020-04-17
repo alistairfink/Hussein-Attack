@@ -29,6 +29,10 @@ func (this *ResourceLoader) loadImage(filePath string) pixel.Picture {
 	return pixel.PictureDataFromImage(img)
 }
 
+func (this *ResourceLoader) LoadIcon() pixel.Picture {
+	return this.loadImage(iconImageName)
+}
+
 func (this *ResourceLoader) LoadLogo() pixel.Picture {
 	return this.loadImage(logoImageName)
 }

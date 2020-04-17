@@ -17,10 +17,13 @@ func main() {
 }
 
 func run() {
+	resourceLoader := resources.NewResourceLoader()
+
 	config := pixelgl.WindowConfig{
 		Title:  constants.GameTitle,
 		Bounds: pixel.R(0, 0, constants.GameWidth, constants.GameHeight),
 		VSync:  true,
+		Icon:   []pixel.Picture{resourceLoader.LoadIcon()},
 	}
 
 	win, err := pixelgl.NewWindow(config)
@@ -29,7 +32,6 @@ func run() {
 	}
 
 	// Startup
-	resourceLoader := resources.NewResourceLoader()
 	stateMachine := state.NewStateMachine()
 	rand.Seed(time.Now().UnixNano())
 	var counter uint64 = 0

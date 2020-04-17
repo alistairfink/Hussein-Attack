@@ -24,6 +24,7 @@ var MenuText = []string{
 }
 
 // Gameplay Constants
+const HusseinStartingAngle = 4.71239
 const LaserCooldown = 10
 const ShootVirusScore = 100
 const ToiletPaperScore = 50
