@@ -7,6 +7,11 @@ const ScoreText = "Score: "
 const GameHeight = 768
 const GameWidth = 1024
 
+var MenuText = []string{
+	"Help Hussein survive the Covid-19 pandemic!",
+	"Collect the toilet paper rolls but be sure to avoid the nasty Covid-19 virions.",
+}
+
 // Gameplay Constants
 const LaserCooldown = 10
 const ToiletPaperScore = 100

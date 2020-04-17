@@ -108,3 +108,9 @@ func (this *hussein) removeLaser(i int) {
 	this.lasers[len(this.lasers)-1], this.lasers[i] = this.lasers[i], this.lasers[len(this.lasers)-1]
 	this.lasers = this.lasers[:len(this.lasers)-1]
 }
+
+func (this *hussein) Reset() {
+	this.angle = 0.0
+	this.lasers = []laser{}
+	this.laserCooldown = constants.LaserCooldown
+}

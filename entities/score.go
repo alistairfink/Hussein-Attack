@@ -33,9 +33,17 @@ func (this *score) Draw() {
 	fmt.Fprintln(scoreText, constants.ScoreText, this.score)
 	scoreTextPos := pixel.IM.Moved(pixel.V(20, this.win.Bounds().Max.Y-scoreText.Bounds().Max.Y-20))
 
-	scoreText.Draw(this.win, scoreTextPos)
+	scoreText.Draw(this.win, scoreTextPos.Scaled(pixel.V(20, this.win.Bounds().Max.Y-scoreText.Bounds().Max.Y-20), 1.4))
 }
 
 func (this *score) IncrementScore(increment int) {
 	this.score += increment
+}
+
+func (this *score) Score() int {
+	return this.score
+}
+
+func (this *score) Reset() {
+	this.score = 0
 }

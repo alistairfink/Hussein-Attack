@@ -34,7 +34,6 @@ func run() {
 	rand.Seed(time.Now().UnixNano())
 	var counter uint64 = 0
 	viruseSpawnRate := constants.InitialViruseSpawnRate
-	println(0, viruseSpawnRate)
 
 	// Entities
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
@@ -89,8 +88,7 @@ func run() {
 
 			for i := 0; i < len(virusEntities); i++ {
 				if virusEntities[i].Draw() {
-					// Gameover
-					// Change State here
+					stateMachine.UpdateStateGameOver()
 				}
 			}
 
@@ -132,6 +130,20 @@ func run() {
 				}
 
 				virusEntities = newVirusEntities
+			}
+		} else if stateMachine.IsGameOVer() {
+			// Get Values
+			score := scoreEntity.Score()
+
+			// Reset Entities
+			virusEntities = []entities.Virus{}
+			toiletPaperEntities = []entities.ToiletPaper{}
+			scoreEntity.Reset()
+			husseinEntity.Reset()
+
+			_ = score
+			if win.Pressed(pixelgl.KeySpace) {
+				stateMachine.UpdateStateGameplay()
 			}
 		} else {
 			panic("Error. Closing " + constants.GameTitle + ".")
