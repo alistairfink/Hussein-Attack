@@ -126,6 +126,8 @@ func run() {
 					if !shotViruses[j] {
 						newVirusEntities[i] = virusEntities[j]
 						i++
+					} else {
+						scoreEntity.IncrementScore(constants.ShootVirusScore)
 					}
 				}
 

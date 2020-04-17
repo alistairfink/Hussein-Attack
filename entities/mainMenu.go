@@ -11,10 +11,11 @@ import (
 )
 
 type mainMenu struct {
-	image        pixel.Picture
-	sprite       *pixel.Sprite
 	win          *pixelgl.Window
 	atlas        *text.Atlas
+	logoImage    pixel.Picture
+	logoSprite   *pixel.Sprite
+	logoPos      pixel.Matrix
 	menuText     *text.Text
 	menuTextPos  pixel.Matrix
 	startText    *text.Text
@@ -29,6 +30,11 @@ func NewMainMenu(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) 
 		text.ASCII,
 	)
 
+	// Logo Image
+	obj.logoImage = (*resourceLoader).LoadLogo()
+	obj.logoSprite = pixel.NewSprite(obj.logoImage, obj.logoImage.Bounds())
+	obj.logoPos = pixel.IM.Moved(pixel.V(win.Bounds().Center().X, win.Bounds().Max.Y-150))
+
 	// Menu Text
 	obj.menuText = text.New(pixel.V(0, 0), obj.atlas)
 	for _, line := range constants.MenuText {
@@ -41,13 +47,13 @@ func NewMainMenu(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) 
 	// Start Text
 	obj.startText = text.New(pixel.V(0, 0), obj.atlas)
 	fmt.Fprintln(obj.startText, constants.StartGameText)
-	obj.startTextPos = pixel.IM.Moved(pixel.V(win.Bounds().Center().Sub(obj.startText.Bounds().Center()).X, 150))
+	obj.startTextPos = pixel.IM.Moved(pixel.V(win.Bounds().Center().Sub(obj.startText.Bounds().Center()).X, 200))
 
 	return obj
 }
 
 func (this *mainMenu) Draw() {
+	this.logoSprite.Draw(this.win, this.logoPos)
 	this.menuText.Draw(this.win, this.menuTextPos.Scaled(this.win.Bounds().Center(), 1.4))
-	// this.menuText.Draw(this.win, this.menuTextPos)
 	this.startText.Draw(this.win, this.startTextPos.Scaled(this.win.Bounds().Center(), 1.4))
 }
