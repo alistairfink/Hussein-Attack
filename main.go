@@ -1,6 +1,9 @@
 package main
 
 import (
+	"math/rand"
+	"time"
+
 	"github.com/alistairfink/Hussein-Attack/constants"
 	"github.com/alistairfink/Hussein-Attack/entities"
 	"github.com/alistairfink/Hussein-Attack/resources"
@@ -8,8 +11,6 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-	"math/rand"
-	"time"
 )
 
 func main() {
@@ -46,6 +47,12 @@ func run() {
 	toiletPaperEntities := []entities.ToiletPaper{}
 	virusEntities := []entities.Virus{}
 
+	// load sound effects buffer to avoid delays
+	soundEffectsBuffer := resources.GetSoundEffectsBuffer()
+
+	// play background music
+	resources.PlaySound("menu", nil)
+
 	for !win.Closed() {
 		win.Clear(colornames.Black)
 
@@ -57,6 +64,7 @@ func run() {
 
 			if win.Pressed(pixelgl.KeyEnter) {
 				stateMachine.UpdateStateGameplay()
+				resources.PlaySound("game", nil)
 			}
 		} else if stateMachine.IsGamePlay() {
 			// Virus Ramp Up
@@ -105,6 +113,7 @@ func run() {
 			}
 
 			if win.Pressed(pixelgl.KeySpace) {
+				resources.PlaySound("laser", soundEffectsBuffer)
 				husseinEntity.ShootLaser()
 			}
 
