@@ -88,9 +88,7 @@ func PlaySound(context string, buffer *beep.Buffer) <-chan bool {
 			speaker.Play(beep.Loop(-1, streamer))
 			select {}
 		} else {
-			speaker.Play(beep.Seq(buffer.Streamer(thisSound.index, buffer.Len()), beep.Callback(func() {
-				done <- true
-			})))
+			speaker.Play(buffer.Streamer(thisSound.index, buffer.Len()))
 		}
 	}()
 
