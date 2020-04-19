@@ -55,8 +55,8 @@ func NewMainMenu(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) 
 	return obj
 }
 
-func (menu *mainMenu) Draw() {
-	menu.logoSprite.Draw(menu.win, menu.logoPos)
-	menu.menuText.Draw(menu.win, menu.menuTextPos)
-	menu.startText.Draw(menu.win, menu.startTextPos)
+func (this *mainMenu) Draw() {
+	this.logoSprite.Draw(this.win, this.logoPos)
+	this.menuText.Draw(this.win, this.menuTextPos)
+	this.startText.Draw(this.win, this.startTextPos)
 }

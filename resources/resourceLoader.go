@@ -1,11 +1,10 @@
 package resources
 
 import (
+	"github.com/faiface/pixel"
 	"image"
 	_ "image/png"
 	"os"
-
-	"github.com/faiface/pixel"
 )
 
 type ResourceLoader struct{}

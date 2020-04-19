@@ -1,9 +1,6 @@
 package main
 
 import (
-	"math/rand"
-	"time"
-
 	"github.com/alistairfink/Hussein-Attack/constants"
 	"github.com/alistairfink/Hussein-Attack/entities"
 	"github.com/alistairfink/Hussein-Attack/resources"
@@ -11,6 +8,8 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
+	"math/rand"
+	"time"
 )
 
 func main() {
