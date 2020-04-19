@@ -2,7 +2,6 @@ package entities
 
 import (
 	"fmt"
-
 	"github.com/alistairfink/Hussein-Attack/constants"
 	"github.com/alistairfink/Hussein-Attack/resources"
 	"github.com/faiface/pixel"
