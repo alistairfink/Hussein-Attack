@@ -64,7 +64,7 @@ func GetSoundEffectsBuffer() *beep.Buffer {
 	return buffer
 }
 
-func PlaySound(context string, buffer *beep.Buffer, initializeSpeaker bool) <-chan bool {
+func playSound(context string, buffer *beep.Buffer, initializeSpeaker bool) <-chan bool {
 	done := make(chan bool)
 	go func() {
 		thisSound := sounds[context]
@@ -87,4 +87,16 @@ func PlaySound(context string, buffer *beep.Buffer, initializeSpeaker bool) <-ch
 	}()
 
 	return done
+}
+
+func PlayMenuMusic() {
+	playSound("menu", nil, true)
+}
+
+func PlayGameMusic() {
+	playSound("game", nil, false)
+}
+
+func PlayLaserSound(buffer *beep.Buffer) {
+	playSound("laser", buffer, false)
 }
