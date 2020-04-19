@@ -25,12 +25,12 @@ func GetSounds() map[string]*sound {
 			isBackgroundMusic: true,
 		},
 		"game": {
-			index:             0,
+			index:             1,
 			path:              gameMusicPath,
 			isBackgroundMusic: true,
 		},
 		"laser": {
-			index:             0,
+			index:             2,
 			path:              laserSoundPath,
 			isBackgroundMusic: false,
 		},
@@ -75,20 +75,30 @@ func GetSoundEffectsBuffer() *beep.Buffer {
 	return buffer
 }
 
-// PlaySound plays a specific game background music or sound effect
-func PlaySound(context string, buffer *beep.Buffer) <-chan bool {
+// PlaySound plays a specific sound (background music or sound effect)
+func PlaySound(context string, buffer *beep.Buffer, initializeSpeaker bool) <-chan bool {
 	done := make(chan bool)
 	go func() {
 		thisSound := GetSounds()[context]
 		// only reset audio if background music
 		if thisSound.isBackgroundMusic {
-			defer close(done)
+			// get sound file
 			streamer, format := GetSoundFile(thisSound.path)
-			speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/2))
-			speaker.Play(beep.Loop(-1, streamer))
+			// create loop of new audio
+			audio := beep.Loop(-1, streamer)
+
+			// initialize speaker if needed
+			if initializeSpeaker {
+				speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/2))
+			} else {
+				speaker.Clear()
+			}
+			speaker.Play(audio)
+			defer close(done)
 			select {}
 		} else {
-			speaker.Play(buffer.Streamer(thisSound.index, buffer.Len()))
+			// TODO: Make this faster, sound effect buffer doesn't seem to help much
+			speaker.Play(buffer.Streamer(0, buffer.Len()))
 		}
 	}()
 

@@ -51,7 +51,7 @@ func run() {
 	soundEffectsBuffer := resources.GetSoundEffectsBuffer()
 
 	// play background music
-	resources.PlaySound("menu", nil)
+	resources.PlaySound("menu", nil, true)
 
 	for !win.Closed() {
 		win.Clear(colornames.Black)
@@ -64,7 +64,7 @@ func run() {
 
 			if win.Pressed(pixelgl.KeyEnter) {
 				stateMachine.UpdateStateGameplay()
-				resources.PlaySound("game", nil)
+				resources.PlaySound("game", nil, false)
 			}
 		} else if stateMachine.IsGamePlay() {
 			// Virus Ramp Up
@@ -113,7 +113,7 @@ func run() {
 			}
 
 			if win.Pressed(pixelgl.KeySpace) {
-				resources.PlaySound("laser", soundEffectsBuffer)
+				resources.PlaySound("laser", soundEffectsBuffer, false)
 				husseinEntity.ShootLaser()
 			}
 
