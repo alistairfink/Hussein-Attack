@@ -46,10 +46,7 @@ func run() {
 	toiletPaperEntities := []entities.ToiletPaper{}
 	virusEntities := []entities.Virus{}
 
-	// load sound effects buffer to avoid delays
 	soundEffectsBuffer := resources.GetSoundEffectsBuffer()
-
-	// play background music
 	resources.PlayMenuMusic()
 
 	for !win.Closed() {
