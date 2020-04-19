@@ -10,5 +10,5 @@ const virusImageName = "./resources/Virus.png"
 
 // Sounds
 const menuMusicPath = "./resources/MenuMusic.mp3"
-const gameMusicPath = "./resources/GameOverMusic.mp3"
+const gameMusicPath = "./resources/GameMusic.mp3"
 const laserSoundPath = "./resources/LaserSound.mp3"
