@@ -46,6 +46,9 @@ func run() {
 	toiletPaperEntities := []entities.ToiletPaper{}
 	virusEntities := []entities.Virus{}
 
+	soundEffectsBuffer := resources.GetSoundEffectsBuffer()
+	resources.PlayMenuMusic()
+
 	for !win.Closed() {
 		win.Clear(colornames.Black)
 
@@ -57,6 +60,7 @@ func run() {
 
 			if win.Pressed(pixelgl.KeyEnter) {
 				stateMachine.UpdateStateGameplay()
+				resources.PlayGameMusic()
 			}
 		} else if stateMachine.IsGamePlay() {
 			// Virus Ramp Up
@@ -105,6 +109,7 @@ func run() {
 			}
 
 			if win.Pressed(pixelgl.KeySpace) {
+				resources.PlayLaserSound(soundEffectsBuffer)
 				husseinEntity.ShootLaser()
 			}
 
