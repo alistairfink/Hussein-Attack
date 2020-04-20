@@ -9,25 +9,7 @@ import (
 	"time"
 )
 
-type sound struct {
-	path              string
-	isBackgroundMusic bool
-}
-
-var sounds = map[string]sound {
-	"menu": {
-		path:              menuMusicPath,
-		isBackgroundMusic: true,
-	},
-	"game": {
-		path:              gameMusicPath,
-		isBackgroundMusic: true,
-	},
-	"laser": {
-		path:              laserSoundPath,
-		isBackgroundMusic: false,
-	},
-}
+var soundEffectPaths = [1]string{laserSoundPath}
 
 func getSoundFile(soundPath string) (beep.StreamSeekCloser, beep.Format) {
 	f, err := os.Open(soundPath)
@@ -50,26 +32,23 @@ func GetSoundEffectsBuffer() *beep.Buffer {
 	var buffer *beep.Buffer
 
 	// loop over and add sound effects to buffer
-	for _, thisSound := range sounds {
-		if !thisSound.isBackgroundMusic {
-			streamer, format := getSoundFile(thisSound.path)
-			if buffer == nil {
-				buffer = beep.NewBuffer(format)
-			}
-			buffer.Append(streamer)
-			streamer.Close()
+	for _, soundEffectPath := range soundEffectPaths {
+		streamer, format := getSoundFile(soundEffectPath)
+		if buffer == nil {
+			buffer = beep.NewBuffer(format)
 		}
+		buffer.Append(streamer)
+		streamer.Close()
 	}
 
 	return buffer
 }
 
-func playSound(context string, buffer *beep.Buffer, initializeSpeaker bool) <-chan bool {
+func playSound(filePath string, buffer *beep.Buffer, initializeSpeaker bool, isEffect bool) <-chan bool {
 	done := make(chan bool)
 	go func() {
-		thisSound := sounds[context]
-		if thisSound.isBackgroundMusic {
-			streamer, format := getSoundFile(thisSound.path)
+		if !isEffect {
+			streamer, format := getSoundFile(filePath)
 			audio := beep.Loop(-1, streamer)
 
 			if initializeSpeaker {
@@ -81,8 +60,16 @@ func playSound(context string, buffer *beep.Buffer, initializeSpeaker bool) <-ch
 			defer close(done)
 			select {}
 		} else {
+			index := 0
+			for i, soundEffectPath := range soundEffectPaths {
+				if soundEffectPath == filePath {
+					index = i
+					break
+				}
+			}
+
 			// TODO: Make this faster, sound effect buffer doesn't seem to help much
-			speaker.Play(buffer.Streamer(0, buffer.Len()))
+			speaker.Play(buffer.Streamer(index, buffer.Len()))
 		}
 	}()
 
@@ -90,13 +77,13 @@ func playSound(context string, buffer *beep.Buffer, initializeSpeaker bool) <-ch
 }
 
 func PlayMenuMusic() {
-	playSound("menu", nil, true)
+	playSound(menuMusicPath, nil, true, false)
 }
 
 func PlayGameMusic() {
-	playSound("game", nil, false)
+	playSound(gameMusicPath, nil, false, false)
 }
 
 func PlayLaserSound(buffer *beep.Buffer) {
-	playSound("laser", buffer, false)
+	playSound(laserSoundPath, buffer, false, true)
 }
