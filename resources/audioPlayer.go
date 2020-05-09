@@ -10,45 +10,41 @@ import (
 )
 
 type audioFile struct {
-	filePath     string
-	streamSeeker *beep.StreamSeeker
-	loopFile     bool
+	filePath string
+	isMusic  bool
 }
 
-type audioPlayer struct {
+type AudioPlayer struct {
 	menuMusic   audioFile
 	gameMusic   audioFile
 	laserEffect audioFile
 }
 
-func NewAudioPlayer() audioPlayer {
-	obj := audioPlayer{}
+func NewAudioPlayer() AudioPlayer {
+	obj := AudioPlayer{}
 	obj.menuMusic = audioFile{
-		filePath:     menuMusicPath,
-		streamSeeker: nil,
-		loopFile:     true,
+		filePath: menuMusicPath,
+		isMusic:  true,
 	}
 
 	obj.gameMusic = audioFile{
-		filePath:     gameMusicPath,
-		streamSeeker: nil,
-		loopFile:     true,
+		filePath: gameMusicPath,
+		isMusic:  true,
 	}
 
 	obj.laserEffect = audioFile{
-		filePath:     laserSoundPath,
-		streamSeeker: initEffectBuffer(laserSoundPath),
-		loopFile:     false,
+		filePath: laserSoundPath,
+		isMusic:  false,
 	}
 
-	_, tempFormat := getSoundFile(menuMusicPath)
-	speaker.Init(tempFormat.SampleRate, tempFormat.SampleRate.N(time.Second/2))
+	_, tempFormat := obj.menuMusic.getSoundFile()
+	speaker.Init(tempFormat.SampleRate, tempFormat.SampleRate.N(time.Second/20))
 
 	return obj
 }
 
-func getSoundFile(soundPath string) (beep.StreamSeekCloser, beep.Format) {
-	f, err := os.Open(soundPath)
+func (this *audioFile) getSoundFile() (beep.StreamSeekCloser, beep.Format) {
+	f, err := os.Open(this.filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,116 +57,37 @@ func getSoundFile(soundPath string) (beep.StreamSeekCloser, beep.Format) {
 	return streamer, format
 }
 
-func initEffectBuffer(filePath string) *beep.StreamSeeker {
-	streamSeekCloser, format := getSoundFile(filePath)
-	defer streamSeekCloser.Close()
-	buffer := beep.NewBuffer(format)
-	buffer.Append(streamSeekCloser)
-	streamer := buffer.Streamer(0, buffer.Len())
-	return &streamer
-}
-
-func (this *audioPlayer) playSound(soundFile audioFile) <-chan bool {
+func (this *AudioPlayer) playSound(soundFile audioFile) <-chan bool {
 	done := make(chan bool)
 	go func() {
-		if soundFile.streamSeeker == nil {
-			streamer, _ := getSoundFile(soundFile.filePath)
-			audio := beep.Loop(-1, streamer)
+		streamer, format := soundFile.getSoundFile()
+		defer streamer.Close()
+		var audio beep.Streamer
+		if soundFile.isMusic {
 			speaker.Clear()
-			speaker.Play()
-			speaker.Play(audio)
+			audio = beep.Loop(-1, streamer)
 		} else {
-			speaker.Play(*soundFile.streamSeeker)
+			buffer := beep.NewBuffer(format)
+			buffer.Append(streamer)
+			audio = buffer.Streamer(0, buffer.Len())
 		}
 
+		speaker.Play(audio)
 		defer close(done)
-
+		select {}
 	}()
 
 	return done
 }
 
-func (this *audioPlayer) PlayMenuMusic() {
+func (this *AudioPlayer) PlayMenuMusic() {
 	this.playSound(this.menuMusic)
 }
 
-func (this *audioPlayer) PlayGameMusic() {
+func (this *AudioPlayer) PlayGameMusic() {
 	this.playSound(this.gameMusic)
 }
 
-func (this *audioPlayer) PlayLaserSound() {
+func (this *AudioPlayer) PlayLaserSound() {
 	this.playSound(this.laserEffect)
 }
-
-// GetSoundEffectsBuffer returns buffer of all game sound effects to avoid delays/load times
-// (cannot do same for background music as it consumes too much memory)
-// func GetSoundEffectsBuffer() *beep.Buffer {
-// 	var buffer *beep.Buffer
-
-// 	// loop over and add sound effects to buffer
-// 	for _, soundEffectPath := range soundEffectPaths {
-// 		streamer, format := getSoundFile(soundEffectPath)
-// 		if buffer == nil {
-// 			buffer = beep.NewBuffer(format)
-// 		}
-// 		buffer.Append(streamer)
-// 		streamer.Close()
-// 	}
-
-// 	return buffer
-// }
-
-// func playSound(filePath string, buffer *beep.Buffer, initializeSpeaker bool, isEffect bool) <-chan bool {
-// 	done := make(chan bool)
-// 	go func() {
-// 		if !isEffect {
-// 			streamer, format := getSoundFile(filePath)
-// 			audio := beep.Loop(-1, streamer)
-
-// 			if initializeSpeaker {
-// 				speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/2))
-// 			} else {
-// 				speaker.Clear()
-// 			}
-// 			speaker.Play(audio)
-// 			defer close(done)
-// 			select {}
-// 		} else {
-// 			index := 0
-// 			for i, soundEffectPath := range soundEffectPaths {
-// 				if soundEffectPath == filePath {
-// 					index = i
-// 					break
-// 				}
-// 			}
-
-// 			println(1)
-// 			// TODO: Make this faster, sound effect buffer doesn't seem to help much
-// 			println("", buffer.Len())
-// 			buffer := buffer.Streamer(index, buffer.Len())
-// 			println(2)
-// 			speaker.Play(buffer)
-// 			println(3)
-// 		}
-// 	}()
-
-// 	return done
-// }
-
-// func PlayMenuMusic() {
-// 	playSound(menuMusicPath, nil, true, false)
-// }
-
-// func PlayGameMusic() {
-// 	playSound(gameMusicPath, nil, false, false)
-// }
-
-// var played bool = false
-
-// func PlayLaserSound(buffer *beep.Buffer) {
-// 	if !played {
-// 		println("Playing...")
-// 		playSound(laserSoundPath, buffer, false, true)
-// 	}
-// 	played = true
-// }

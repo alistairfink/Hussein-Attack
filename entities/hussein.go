@@ -16,9 +16,14 @@ type hussein struct {
 	lasers         []laser
 	resourceLoader *resources.ResourceLoader
 	laserCooldown  int
+	audioPlayer    *resources.AudioPlayer
 }
 
-func NewHussein(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) hussein {
+func NewHussein(
+	resourceLoader *resources.ResourceLoader,
+	win *pixelgl.Window,
+	audioPlayer *resources.AudioPlayer,
+) hussein {
 	obj := hussein{}
 	obj.angle = constants.HusseinStartingAngle
 	obj.image = (*resourceLoader).LoadHussein()
@@ -28,6 +33,7 @@ func NewHussein(resourceLoader *resources.ResourceLoader, win *pixelgl.Window) h
 	obj.lasers = []laser{}
 	obj.resourceLoader = resourceLoader
 	obj.laserCooldown = constants.LaserCooldown
+	obj.audioPlayer = audioPlayer
 
 	return obj
 }
@@ -52,6 +58,7 @@ func (this *hussein) RotateRight(deltaTime float64) {
 
 func (this *hussein) ShootLaser() {
 	if this.laserCooldown <= 0 {
+		this.audioPlayer.PlayLaserSound()
 		this.lasers = append(this.lasers, NewLaser(this.resourceLoader, this.win, this.angle))
 		this.laserCooldown = constants.LaserCooldown
 	}
