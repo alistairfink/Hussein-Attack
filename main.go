@@ -18,6 +18,7 @@ func main() {
 
 func run() {
 	resourceLoader := resources.NewResourceLoader()
+	audioPlayer := resources.NewAudioPlayer()
 
 	config := pixelgl.WindowConfig{
 		Title:  constants.GameTitle,
@@ -42,12 +43,11 @@ func run() {
 	mainMenuEntity := entities.NewMainMenu(&resourceLoader, win)
 	gameOverEntity := entities.NewGameOver(&resourceLoader, win)
 	scoreEntity := entities.NewScore(&resourceLoader, win)
-	husseinEntity := entities.NewHussein(&resourceLoader, win)
+	husseinEntity := entities.NewHussein(&resourceLoader, win, &audioPlayer)
 	toiletPaperEntities := []entities.ToiletPaper{}
 	virusEntities := []entities.Virus{}
 
-	soundEffectsBuffer := resources.GetSoundEffectsBuffer()
-	resources.PlayMenuMusic()
+	audioPlayer.PlayMenuMusic()
 
 	for !win.Closed() {
 		win.Clear(colornames.Black)
@@ -60,7 +60,7 @@ func run() {
 
 			if win.Pressed(pixelgl.KeyEnter) {
 				stateMachine.UpdateStateGameplay()
-				resources.PlayGameMusic()
+				audioPlayer.PlayGameMusic()
 			}
 		} else if stateMachine.IsGamePlay() {
 			// Virus Ramp Up
@@ -109,7 +109,6 @@ func run() {
 			}
 
 			if win.Pressed(pixelgl.KeySpace) {
-				resources.PlayLaserSound(soundEffectsBuffer)
 				husseinEntity.ShootLaser()
 			}
 
